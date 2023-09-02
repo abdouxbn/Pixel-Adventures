@@ -10,6 +10,10 @@ public class Checkpoint_EndPassed : MonoBehaviour
         {
             GetComponent<Animator>().SetTrigger("passed");
             Debug.Log("LEVEL COMPLETED!");
+            GameManager.GameManagerInstance.startTime = false;
+
+            GameManager.GameManagerInstance.SaveBestTime();
+            GameManager.GameManagerInstance.SaveCollectedFruit();
         }
     }
 }

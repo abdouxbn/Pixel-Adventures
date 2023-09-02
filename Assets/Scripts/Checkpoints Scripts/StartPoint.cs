@@ -18,7 +18,8 @@ public class StartPoint : MonoBehaviour
         {   
             if (other.transform.position.x > transform.position.x)
             {
-                GetComponent<Animator>().SetTrigger("touched");            
+                GetComponent<Animator>().SetTrigger("touched");   
+                GameManager.GameManagerInstance.startTime = true;         
             }
         }
     }
