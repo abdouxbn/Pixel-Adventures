@@ -14,6 +14,7 @@ public class Checkpoint_EndPassed : MonoBehaviour
 
             GameManager.GameManagerInstance.SaveBestTime();
             GameManager.GameManagerInstance.SaveCollectedFruit();
+            GameManager.GameManagerInstance.SaveLevelInfo();
         }
     }
 }

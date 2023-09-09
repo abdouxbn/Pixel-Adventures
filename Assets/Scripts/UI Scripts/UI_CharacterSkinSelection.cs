@@ -23,17 +23,26 @@ public class UI_CharacterSkinSelection : MonoBehaviour
     [Header("Fruits:")]
     [SerializeField] private TextMeshProUGUI fruitsText;
 
-    private void Awake()
+
+    private void OnEnable()
     {
-        purchasedSkin[0] = true;
-
-        fruitsText.text = PlayerPrefs.GetInt("TotalFruitsCollected").ToString();
+        SkinPurchaseEquipManager();
     }
-
-
 
     private void SkinPurchaseEquipManager()
     {   
+        purchasedSkin[0] = true;
+
+        for (int i = 1; i < purchasedSkin.Length; i++)
+        {
+            bool isSkinUnlocked = PlayerPrefs.GetInt($"SkinPurchased{i}") == 1;
+            if (isSkinUnlocked)
+            {
+                purchasedSkin[i] = true;
+            }
+        }
+
+        fruitsText.text = PlayerPrefs.GetInt("TotalFruitsCollected").ToString();
         //Set value to/opposite of purchasedSkin[SkinID]
         equipButton.SetActive(purchasedSkin[skinID]);
         purchaseButton.SetActive(!purchasedSkin[skinID]);
@@ -61,14 +70,35 @@ public class UI_CharacterSkinSelection : MonoBehaviour
     }
 
     public void PurchaseSkin()
-    {
-        purchasedSkin[skinID] = true;
-        SkinPurchaseEquipManager();
+    {   
+        if(HaveEnoughFruits()) 
+        {
+            PlayerPrefs.SetInt($"SkinPurchased{skinID}", 1);
+            purchasedSkin[skinID] = true;
+            SkinPurchaseEquipManager();
+        }
+        else 
+        {
+            Debug.Log("Not enough money!");
+        }
     }
 
     public void EquipSkin()
     {
         PlayerManager.PlayerManagerInstance.equippedSkinID = skinID;
         Debug.Log("Skin Equipped!");
+    }
+
+    public bool HaveEnoughFruits()
+    {
+        int totalFruits = PlayerPrefs.GetInt("TotalFruitsCollected");
+
+        if (totalFruits > skinPrice[skinID])
+        {
+            totalFruits -= skinPrice[skinID];
+            PlayerPrefs.SetInt("TotalFruitsCollected", totalFruits);
+            return true;
+        }
+        return false;
     }
 }

@@ -14,6 +14,10 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {   
+        PlayerPrefs.SetInt($"Level_{1}Unlocked", 1);
+
+        UpdateUnlockedLevels();
+
         for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
         {
             if (!unlockedLevel[i]) return;
@@ -26,5 +30,16 @@ public class LevelManager : MonoBehaviour
     }
 
     public void LoadScene(string sceneName) => SceneManager.LoadScene(sceneName);
+
+    private void UpdateUnlockedLevels()
+    {
+        for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            bool unlocked = PlayerPrefs.GetInt($"Level_{i}Unlocked") == 1;
+
+            if (unlocked) unlockedLevel[i] = true;
+            else return;
+        }
+    }
 
 }

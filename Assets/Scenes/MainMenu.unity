@@ -4631,7 +4631,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelButton: {fileID: 5409875158607035363, guid: 4eb89bf790cff6246aca3cc5a3b125d4, type: 3}
   levelButtonParent: {fileID: 1653980563}
-  unlockedLevel: 000101000000
+  unlockedLevel: 000000000000
 --- !u!4 &1487516364
 Transform:
   m_ObjectHideFlags: 0
