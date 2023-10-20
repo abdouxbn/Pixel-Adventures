@@ -11,12 +11,15 @@ public class PlayerAnimator : MonoBehaviour
     private const string IS_TOUCHING_WALL = "isTouchingWall";
     private const string IS_WALL_SLIDING = "isWallSliding";
     private const string IS_KNOCKED = "isKnocked";
+    private const string IS_PLAYER_CONTROLLABLE = "isPlayerControllable";
     #endregion
 
     #region COMPONENTS
     private Animator playerAnimator;
     private SpriteRenderer playerSpriteRenderer;
     #endregion
+
+    [SerializeField] private ParticleSystem dustParticleFx;
 
     private bool isFacingRight = true;
     private int facingDirection = 1; 
@@ -27,10 +30,13 @@ public class PlayerAnimator : MonoBehaviour
     {
         playerAnimator = GetComponent<Animator>();
         playerSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        SetAnimationLayer();
     }
 
     private void Update()
     {
+        playerAnimator.SetBool(IS_PLAYER_CONTROLLABLE, PlayerController.IsPlayerControllable);
         playerAnimator.SetBool(IS_KNOCKED, PlayerController.IsKnocked);
         playerAnimator.SetBool(IS_MOVING, IsPlayerMoving());
         playerAnimator.SetBool(IS_GROUNDED, IsPlayerGrounded());
@@ -64,20 +70,34 @@ public class PlayerAnimator : MonoBehaviour
     }
     private void FlipPlayerSprite()
     {
-            if (isFacingRight && PlayerController.PlayerVelocity.x < 0f)
-            {
-                Flip(true);  
-            }
-            if (!isFacingRight && PlayerController.PlayerVelocity.x > 0f)
-            {
-                Flip(false);
-            }
+        if (isFacingRight && PlayerController.PlayerVelocity.x < 0f)
+        {
+            Flip(true);  
+        }
+        if (!isFacingRight && PlayerController.PlayerVelocity.x > 0f)
+        {
+            Flip(false);
+        }
     }
     private void Flip(bool flip)
     {
+        if (IsPlayerGrounded()) dustParticleFx.Play();    
+        dustParticleFx.Play();
         facingDirection *= -1;
         isFacingRight = !isFacingRight;
         playerSpriteRenderer.flipX = flip;
+    }
+
+    private void SetAnimationLayer()
+    {
+        int skinID = PlayerManager.PlayerManagerInstance.equippedSkinID;
+
+        for (int i = 0; i < playerAnimator.layerCount; i++)
+        {
+            playerAnimator.SetLayerWeight(i, 0);
+        }
+
+        playerAnimator.SetLayerWeight(skinID, 1);
     }
 
 }

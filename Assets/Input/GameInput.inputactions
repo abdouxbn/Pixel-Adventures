@@ -292,7 +292,7 @@
             "id": "64971e8c-fd76-45a6-9f01-bcf0059000c7",
             "actions": [
                 {
-                    "name": "Resume",
+                    "name": "Pause",
                     "type": "Button",
                     "id": "3ec3f10b-19de-4b62-b5dc-7ff4fa0f0925",
                     "expectedControlType": "Button",
@@ -309,7 +309,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Resume",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

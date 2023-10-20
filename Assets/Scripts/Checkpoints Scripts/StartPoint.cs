@@ -9,7 +9,7 @@ public class StartPoint : MonoBehaviour
     private void Awake()
     {
         PlayerManager.PlayerManagerInstance.spawnPoint = actualSpawnPoint;
-        PlayerManager.PlayerManagerInstance.SpawnPlayer();
+        PlayerManager.PlayerManagerInstance.PlayerSpawn();
     }
 
     private void OnTriggerExit2D(Collider2D other)

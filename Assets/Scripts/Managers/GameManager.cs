@@ -29,12 +29,12 @@ public class GameManager : MonoBehaviour
     public void SaveBestTime()
     {
         startTime = false;
-        float lastTime = PlayerPrefs.GetFloat($"Level_{levelNumber}BestTime", 999);
-        if (timer < lastTime)
+        float lastTime = PlayerPrefs.GetFloat($"Level_{levelNumber}BestTime", 0f);
+        
+        if (lastTime == 0f || timer < lastTime)
         {
             PlayerPrefs.SetFloat($"Level_{levelNumber}BestTime", timer);
         }
-        timer = 0;
     }
 
     public void SaveCollectedFruit()
@@ -44,8 +44,6 @@ public class GameManager : MonoBehaviour
 
         PlayerPrefs.SetInt("TotalFruitsCollected", newTotalFruits);
         PlayerPrefs.SetInt($"Level_{levelNumber}FruitsCollected", PlayerManager.PlayerManagerInstance.fruitsCollected);
-
-        PlayerManager.PlayerManagerInstance.fruitsCollected = 0;
     }
 
     public void SaveLevelInfo()

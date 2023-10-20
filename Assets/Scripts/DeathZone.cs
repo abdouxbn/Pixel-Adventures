@@ -9,7 +9,7 @@ public class DeathZone : MonoBehaviour
     {
         if (other.GetComponent<PlayerController>() != null)
         {
-            Destroy(other.gameObject);
+            PlayerManager.PlayerManagerInstance.OnPlayerFall();
         }
     }
 

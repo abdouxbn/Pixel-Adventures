@@ -27,11 +27,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDecceleration;
     [Range(0.1f, 1.0f)] [SerializeField] private float wallSlideFallVelocityPercent = 0.35f;
     //[Range(0.40f, 0.65f)] [SerializeField] private float wallSlideFallVelocityAcelerator = 0.45f;
+    private bool isPlayerControllable = false;
+    private bool canMove;
     private float acceleration;
     private float deceleration;
-    private bool canMove;
     private float finalMovementForce;
     #endregion
+
+    [Space]
+    [Header("Particle Effects: ")]
+    [SerializeField] private ParticleSystem dustParticleFx;
 
     #region KNOCKBACK
     [Space]
@@ -59,6 +64,7 @@ public class PlayerController : MonoBehaviour
     private bool canCoyoteJump;
     private int jumpsRemaining = 2;
     private bool canDoubleJump; 
+
     //* Unlock Abilities 
     //? SerializeField to use in inspector? To test? 
     //! Serialized for debugging and testing!
@@ -109,6 +115,7 @@ public class PlayerController : MonoBehaviour
     public static bool IsPlayerTouchingWall {get; private set;}
     public static bool IsPlayerWallSliding {get; private set;}
     public static bool IsKnocked{get; private set;}
+    public static bool IsPlayerControllable {get; private set;}
     #endregion
 
 
@@ -149,10 +156,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Input 
-        //ReadMoveInput();
-        moveInput = gameInput.Player.Move.ReadValue<float>();
-        verticalInput = gameInput.Player.Vertical.ReadValue<float>();
-        //ReadVerticalInput();
+        MovementInput();
+        
         // Collision checks
         IsTouchingWall();
         CheckIfCanWallSlide();
@@ -201,6 +206,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
+            dustParticleFx.Play();
             jumpsRemaining = 2;
         }
     }
@@ -242,14 +248,16 @@ public class PlayerController : MonoBehaviour
     //*  ############################################################### Custom Functions ###############################################################
     //*  ################################################################################################################################################
 
-    private void ReadMoveInput(InputAction.CallbackContext ctx)
+    private void MovementInput()
     {
-        moveInput = ctx.ReadValue<float>();
+        if(!isPlayerControllable) return;
+        moveInput = gameInput.Player.Move.ReadValue<float>();
+        verticalInput = gameInput.Player.Vertical.ReadValue<float>();
     }
 
-    private float ReadVerticalInput()
+    public void PlayerIsControllable()
     {
-        return verticalInput = gameInput.Player.Vertical.ReadValue<float>();
+        isPlayerControllable = true;
     }
 
     private void DoMovement()
@@ -302,9 +310,12 @@ public class PlayerController : MonoBehaviour
     public void KnockBack(Transform damageSourceTransform)
     {
         if (!canBeKnocked) return;
+
    
         isKnocked = true;
         canBeKnocked = false;
+        
+        PlayerManager.PlayerManagerInstance.OnPlayerDamaged();
 
         #region DEFINE_KNOCKBACK_DIRECTION
         // Direction in which player will be knocked back 
@@ -328,7 +339,7 @@ public class PlayerController : MonoBehaviour
         playerRB.velocity = new Vector2(0f, 0f);
         Vector2 calculatedKnockback = new Vector2(knockbackForce * knockbackDirection.x * directionOverride, knockbackForce * knockbackDirection.y); 
         playerRB.AddForce(calculatedKnockback, ForceMode2D.Impulse);
-        GetComponent<CameraShake>().ShakeScreen(-PlayerAnimator.FacingDirection);
+        PlayerManager.PlayerManagerInstance.ShakeScreen(-PlayerAnimator.FacingDirection);
 
         Invoke(nameof(CancelKnockback), knockbackDuration);
         Invoke(nameof(AllowKnockback), invincibilityDuration);
@@ -377,7 +388,7 @@ public class PlayerController : MonoBehaviour
     private void Jump(float jumpForce)
     {   
         if (!isKnocked)
-        {
+        {   dustParticleFx.Play();
             playerRB.velocity = new Vector2(playerRB.velocity.x, 0f);
             playerRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);        
         }
@@ -518,6 +529,7 @@ public class PlayerController : MonoBehaviour
         IsPlayerTouchingWall = isTouchingWall;
         IsPlayerWallSliding = isWallSliding;
         IsKnocked = isKnocked;
+        IsPlayerControllable = isPlayerControllable;
     }
 
 }
