@@ -67,6 +67,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnPlayerDamaged()
     {
+        AudioManager.AudioManagerInstance.PlayClip("PlayerHit");
         if(fruitsCollected > 0) 
         {
             DropFruit();

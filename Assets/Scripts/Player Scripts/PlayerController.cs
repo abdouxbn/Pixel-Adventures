@@ -389,6 +389,7 @@ public class PlayerController : MonoBehaviour
     {   
         if (!isKnocked)
         {   dustParticleFx.Play();
+            AudioManager.AudioManagerInstance.PlayClip("PlayerJump");
             playerRB.velocity = new Vector2(playerRB.velocity.x, 0f);
             playerRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);        
         }

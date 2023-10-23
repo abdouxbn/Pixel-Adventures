@@ -92,6 +92,7 @@ public class Enemy : MonoBehaviour
         {
             canMove = false;
             enemyAnimator.SetTrigger(WAS_HIT);
+            AudioManager.AudioManagerInstance.PlayClip("EnemyDamaged");
         }
     }
     protected void DestroyAfterAnimation()

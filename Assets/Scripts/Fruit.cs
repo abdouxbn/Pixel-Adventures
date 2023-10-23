@@ -10,6 +10,7 @@ public class Fruit : MonoBehaviour
         if (other.GetComponent<PlayerController>() != null)
         {
             PlayerManager.PlayerManagerInstance.fruitsCollected++;
+            AudioManager.AudioManagerInstance.PlayClip("FruitCollected");
             Destroy(gameObject);
         }
     }

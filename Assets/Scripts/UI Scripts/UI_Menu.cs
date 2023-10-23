@@ -5,6 +5,16 @@ using UnityEngine.UI;
 
 public class UI_Menu : MonoBehaviour
 {
+    [SerializeField] private UI_VolumeControl[] volumeControl; 
+
+    private void Start()
+    {
+        for (int i = 0; i < volumeControl.Length; i++)
+        {
+            volumeControl[i].GetComponent<UI_VolumeControl>().SetGameVolume();
+        }
+    }
+
     public void ChangeMenu(GameObject uiMenu)
     {
         for (int i = 0; i < transform.childCount; i++)
