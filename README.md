@@ -3,6 +3,6 @@
 
 Assets used:
 
-Pixel Adventures 1 & 2 by PixelFrog on itch.io (https://pixelfrog-assets.itch.io/pixel-adventure-1) 
-
-Kenney Fonts (https://www.kenney.nl/assets/kenney-fonts) 
+Pixel Adventures 1 by PixelFrog 
+Pixel Adventures 2 by PixelFrog
+Kenney Fonts by Kenney
